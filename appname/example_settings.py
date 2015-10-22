@@ -3,10 +3,10 @@ db_file = tempfile.NamedTemporaryFile()
 
 
 class Config(object):
-    SECRET_KEY = 'nvC2t3XwlF5B7yrMcwXg'
+    SECRET_KEY = 'REPLACE ME'
     SECURITY_URL_PREFIX = "/admin"
     SECURITY_PASSWORD_HASH = "pbkdf2_sha512"
-    SECURITY_PASSWORD_SALT = "BtKSbbKiN1SfGahTfy6UYyTkkf"
+    SECURITY_PASSWORD_SALT = "ATGUOHAELKiubahiughaerGOJAEGj"
 
     SECURITY_LOGIN_URL = "/login/"
     SECURITY_LOGOUT_URL = "/logout/"
@@ -26,13 +26,13 @@ class Config(object):
     SECURITY_TRACKABLE = True
     SECURITY_CHANGEABLE = True
 
-    MAIL_SERVER = 'smtp.gmail.com'
-    MAIL_PORT = 465
+    MAIL_SERVER = 'localhost'
+    MAIL_PORT = 25
     MAIL_USE_TLS = False
-    MAIL_USE_SSL = True
-    MAIL_USERNAME = 'pierre@hudson-trading.com'
-    MAIL_PASSWORD = 'phpsmzozndgjbvxu'
-    MAIL_DEFAULT_SENDER = 'pierre@hudson-trading.com'
+    MAIL_USE_SSL = False
+    MAIL_USERNAME = None
+    MAIL_PASSWORD = None
+    MAIL_DEFAULT_SENDER = None
     MAIL_MAX_EMAILS = None
     MAIL_ASCII_ATTACHMENTS = False
 

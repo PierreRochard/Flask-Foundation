@@ -40,3 +40,5 @@ env*
 *.sublime-*
 
 .idea/*
+
+appname/settings.py
