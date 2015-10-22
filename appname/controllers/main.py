@@ -1,42 +1,38 @@
-from flask import Blueprint, render_template, flash, request, redirect, url_for
-from flask.ext.login import login_user, logout_user, login_required
+from flask import url_for, redirect, request, abort
+from flask_security import current_user
+from flask import Blueprint
+from flask.ext.admin.contrib import sqla
+from flask.ext.admin.contrib.sqla import ModelView
 
-from appname.extensions import cache
-from appname.forms import LoginForm
-from appname.models import User
+from appname.extensions import admin
+from appname.models import db, User, Role
 
 main = Blueprint('main', __name__)
 
 
-@main.route('/')
-@cache.cached(timeout=1000)
-def home():
-    return render_template('index.html')
+class MyModelView(sqla.ModelView):
+    def is_accessible(self):
+        if not current_user.is_active() or not current_user.is_authenticated():
+            return False
+
+        if current_user.has_role('superuser'):
+            return True
+
+        return False
+
+    def _handle_view(self, name, **kwargs):
+        """
+        Override builtin _handle_view in order to redirect users when a view is not accessible.
+        """
+        if not self.is_accessible():
+            if current_user.is_authenticated():
+                # permission denied
+                abort(403)
+            else:
+                # login
+                return redirect(url_for('security.login', next=request.url))
 
 
-@main.route("/login", methods=["GET", "POST"])
-def login():
-    form = LoginForm()
+admin.add_view(MyModelView(User, db.session))
+admin.add_view(MyModelView(Role, db.session))
 
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).one()
-        login_user(user)
-
-        flash("Logged in successfully.", "success")
-        return redirect(request.args.get("next") or url_for(".home"))
-
-    return render_template("login.html", form=form)
-
-
-@main.route("/logout")
-def logout():
-    logout_user()
-    flash("You have been logged out.", "success")
-
-    return redirect(url_for(".home"))
-
-
-@main.route("/restricted")
-@login_required
-def restricted():
-    return "You can only see this if you are logged in!", 200

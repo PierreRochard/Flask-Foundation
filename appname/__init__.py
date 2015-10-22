@@ -1,17 +1,20 @@
 #! ../env/bin/python
 
 from flask import Flask
+from flask.ext.security import Security
 from webassets.loaders import PythonLoader as PythonAssetsLoader
+from flask_admin import helpers as admin_helpers
+from flask_mail import Mail
 
 from appname import assets
-from appname.models import db
+from appname.models import db, User, Role, user_datastore
 from appname.controllers.main import main
 
 from appname.extensions import (
     cache,
     assets_env,
     debug_toolbar,
-    login_manager
+    admin
 )
 
 
@@ -41,7 +44,19 @@ def create_app(object_name, env="prod"):
     # initialize SQLAlchemy
     db.init_app(app)
 
-    login_manager.init_app(app)
+    mail = Mail(app)
+
+    security = Security(app, user_datastore)
+
+    @security.context_processor
+    def security_context_processor():
+        return dict(
+            admin_base_template=admin.base_template,
+            admin_view=admin.index_view,
+            h=admin_helpers,
+        )
+
+    admin.init_app(app)
 
     # Import and register the different asset bundles
     assets_env.init_app(app)
