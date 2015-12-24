@@ -42,3 +42,6 @@ env*
 .idea/*
 
 appname/settings.py
+
+venv2
+venv

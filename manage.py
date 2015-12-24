@@ -28,12 +28,42 @@ def make_shell_context():
 
 
 @manager.command
-def createdb():
-    """ Creates a database with all of the tables defined in
-        your SQLAlchemy models
-    """
-
+def create_tables():
     db.create_all()
+
+
+@manager.command
+def drop_tables():
+    db.drop_all()
+
+
+@manager.command
+def create_superuser():
+    if User.query.count() == 1:
+        if not Role.query.count():
+            superuser = Role()
+            superuser.name = 'superuser'
+            superuser.description = 'superuser'
+            db.session.add(superuser)
+            db.session.commit()
+        else:
+            superuser = Role.query.filter(Role.name == 'superuser').one()
+        admin = User.query.first()
+        admin.roles.append(superuser)
+        db.session.commit()
+
+
+@manager.option('-e', '--email', dest='email')
+@manager.option('-p', '--password', dest='password')
+def create_admin(email, password):
+    admin = User()
+    admin.email = email
+    admin.password = encrypt_password(password)
+    admin.active = True
+    admin.confirmed_at = datetime.now(tzlocal())
+    db.session.add(admin)
+    db.session.commit()
+
 
 if __name__ == "__main__":
     manager.run()
