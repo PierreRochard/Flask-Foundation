@@ -1,7 +1,6 @@
 from flask import url_for, redirect, request, abort
 from flask_security import current_user
 from flask import Blueprint
-from flask.ext.admin.contrib import sqla
 from flask.ext.admin.contrib.sqla import ModelView
 
 from appname.extensions import admin
@@ -10,7 +9,7 @@ from appname.models import db, User, Role
 main = Blueprint('main', __name__)
 
 
-class MyModelView(sqla.ModelView):
+class MyModelView(ModelView):
     def is_accessible(self):
         if not current_user.is_active() or not current_user.is_authenticated():
             return False
