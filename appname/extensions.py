@@ -9,4 +9,4 @@ assets_env = Environment()
 
 debug_toolbar = DebugToolbarExtension()
 
-admin = Admin(url='/', base_template='base_master.html')
+admin = Admin(url='/', base_template='base_master.html', template_mode='bootstrap3')
