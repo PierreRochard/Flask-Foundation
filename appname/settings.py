@@ -3,10 +3,10 @@ db_file = tempfile.NamedTemporaryFile()
 
 
 class Config(object):
-    SECRET_KEY = 'nvC2t3XwlF5B7yrMcwXg'
+    SECRET_KEY = ''
     SECURITY_URL_PREFIX = "/admin"
     SECURITY_PASSWORD_HASH = "pbkdf2_sha512"
-    SECURITY_PASSWORD_SALT = "BtKSbbKiN1SfGahTfy6UYyTkkf"
+    SECURITY_PASSWORD_SALT = ''
 
     SECURITY_LOGIN_URL = "/login/"
     SECURITY_LOGOUT_URL = "/logout/"
@@ -30,9 +30,9 @@ class Config(object):
     MAIL_PORT = 465
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
-    MAIL_USERNAME = 'pierre@hudson-trading.com'
-    MAIL_PASSWORD = 'phpsmzozndgjbvxu'
-    MAIL_DEFAULT_SENDER = 'pierre@hudson-trading.com'
+    MAIL_USERNAME = ''
+    MAIL_PASSWORD = ''
+    MAIL_DEFAULT_SENDER = ''
     MAIL_MAX_EMAILS = None
     MAIL_ASCII_ATTACHMENTS = False
 
